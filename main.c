@@ -18,8 +18,8 @@
 
 // definição do tempo
 #define DEBOUNCE_DELAY_MS 50
-#define RED_BLINK_INTERVAL_MS 200    // 5 times per second
-#define RGB_BLINK_INTERVAL_MS 333    // 3 times per second
+#define RED_BLINK_INTERVAL_MS 200    // 5 vezes por segundo
+#define RGB_BLINK_INTERVAL_MS 333    // 3 vezes por segundo
 #define DIGIT_DISPLAY_DELAY_MS 1000
 
 // variáveis globais
@@ -32,7 +32,7 @@ static volatile int button_a_count = 0;
 static volatile int button_b_count = 0;
 
 
-// Funções
+// Function prototypes
 void setup_gpio(void);
 uint32_t matrix_rgb(double r, double g, double b);
 void display_number(PIO pio, uint sm, int number, double r, double g, double b);
@@ -115,7 +115,7 @@ static const double number_patterns[10][25] = {
 };
 
 void setup_gpio(void) {
-    // Inicializa as leds
+    // Initialize RGB LED pins
     gpio_init(LED_RGB_RED);
     gpio_init(LED_RGB_GREEN);
     gpio_init(LED_RGB_BLUE);
@@ -241,7 +241,7 @@ int main() {
     stdio_init_all();
     setup_gpio();
 
-    // Inicializa o PIO para a matrix
+    // Initialize PIO for LED matrix
     PIO pio = pio0;
     uint offset = pio_add_program(pio, &main_program);
     uint sm = pio_claim_unused_sm(pio, true);
