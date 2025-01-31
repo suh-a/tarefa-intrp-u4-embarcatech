@@ -7,7 +7,7 @@
 #include "hardware/clocks.h"
 #include "main.pio.h"
 
-// Pin definitions
+// definição dos pinos
 #define LED_RGB_RED 13
 #define LED_RGB_GREEN 11
 #define LED_RGB_BLUE 12
@@ -16,13 +16,13 @@
 #define MATRIX_PIN 7
 #define NUM_PIXELS 25
 
-// Timing constants
+// definição do tempo
 #define DEBOUNCE_DELAY_MS 50
 #define RED_BLINK_INTERVAL_MS 200    // 5 times per second
 #define RGB_BLINK_INTERVAL_MS 333    // 3 times per second
 #define DIGIT_DISPLAY_DELAY_MS 1000
 
-// Global variables
+// variáveis globais
 static volatile int current_number = 0;
 static volatile uint32_t last_button_time = 0;
 static volatile bool red_led_active = true;
@@ -32,7 +32,7 @@ static volatile int button_a_count = 0;
 static volatile int button_b_count = 0;
 
 
-// Function prototypes
+// Funções
 void setup_gpio(void);
 uint32_t matrix_rgb(double r, double g, double b);
 void display_number(PIO pio, uint sm, int number, double r, double g, double b);
@@ -40,7 +40,7 @@ void handle_rgb_leds(void);
 bool debounce_check(void);
 void gpio_callback(uint gpio, uint32_t events);
 
-// LED matrix number patterns
+// contagem
 static const double number_patterns[10][25] = {
     // 0
     {1,1,1,1,1, 
@@ -115,7 +115,7 @@ static const double number_patterns[10][25] = {
 };
 
 void setup_gpio(void) {
-    // Initialize RGB LED pins
+    // Inicializa as leds
     gpio_init(LED_RGB_RED);
     gpio_init(LED_RGB_GREEN);
     gpio_init(LED_RGB_BLUE);
@@ -123,7 +123,7 @@ void setup_gpio(void) {
     gpio_set_dir(LED_RGB_GREEN, GPIO_OUT);
     gpio_set_dir(LED_RGB_BLUE, GPIO_OUT);
 
-    // Initialize buttons with pull-ups
+    // Inicializa os butões com pull-ups
     gpio_init(BUTTON_A);
     gpio_init(BUTTON_B);
     gpio_set_dir(BUTTON_A, GPIO_IN);
@@ -131,7 +131,7 @@ void setup_gpio(void) {
     gpio_pull_up(BUTTON_A);
     gpio_pull_up(BUTTON_B);
 
-    // Setup interrupts for buttons
+    // interrupção
     gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
     gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
 
@@ -166,14 +166,14 @@ void handle_rgb_leds(void) {
     static bool led_state = false;
     uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
-    // Red LED blinking (5 times per second)
+    // led vermelho pisca 5 vezes por segundo
     if (red_led_active && (current_time - last_red_blink >= RED_BLINK_INTERVAL_MS)) {
         led_state = !led_state;
         gpio_put(LED_RGB_RED, led_state);
         last_red_blink = current_time;
     }
 
-    // Green/Blue LED blinking (3 times per second)
+    // led verde e azul piscam 3 vezes por segundo
     if ((green_led_active || blue_led_active) && 
         (current_time - last_rgb_blink >= RGB_BLINK_INTERVAL_MS)) {
         led_state = !led_state;
@@ -237,19 +237,17 @@ void print_button_presses_per_second() {
 }
 
 
-
-
 int main() {
     stdio_init_all();
     setup_gpio();
 
-    // Initialize PIO for LED matrix
+    // Inicializa o PIO para a matrix
     PIO pio = pio0;
     uint offset = pio_add_program(pio, &main_program);
     uint sm = pio_claim_unused_sm(pio, true);
     main_program_init(pio, sm, offset, MATRIX_PIN);
 
-    // Initial LED states
+    // estado inicial dos leds
     red_led_active = true;
     green_led_active = false;
     blue_led_active = false;
