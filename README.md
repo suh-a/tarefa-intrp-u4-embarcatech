@@ -1,18 +1,14 @@
 # 📌 Projeto: Contador com Interrupções e LED RGB
 
 ## 🎯 **Objetivo e Funcionalidade**
-Este projeto tem como objetivo apresentar uma contagem numérica de **0 a 9** em uma matriz de LEDs **5x5**, utilizando **interrupções (IRQ)** para controle via botões. O sistema também inclui um **LED RGB** que altera sua cor e comportamento conforme as interações do usuário.
+Este projeto tem como objetivo apresentar uma contagem numérica de **0 a 9** em uma matriz de LEDs **5x5**, utilizando **interrupções (IRQ)** para controle via botões. O sistema também inclui um **LED RGB** que pisca 5 vezes por segundo.
 
 ### 🔹 **Funcionamento:**
 1. **Inicialmente**, o LED RGB vermelho pisca **5 vezes por segundo**.
 2. **Ao pressionar o botão A (GPIO 5)**:
    - A contagem é **incrementada**.
-   - O LED RGB muda para **verde**, piscando **3 vezes por segundo**.
-   - Os LEDs vermelho e azul são **desligados**.
 3. **Ao pressionar o botão B (GPIO 6)**:
    - A contagem é **decrementada**.
-   - O LED RGB muda para **azul**, piscando **3 vezes por segundo**.
-   - Os LEDs vermelho e verde são **desligados**.
 
 ---
 ## 📊 **Fluxograma do Funcionamento**
