@@ -39,7 +39,6 @@ Este projeto tem como objetivo apresentar uma contagem numérica de **0 a 9** em
 - Explicar o código e os conceitos utilizados.
 - Link do vídeo abaixo:
 - Google Drive https://drive.google.com/file/d/16mReiY8o7HsPSAhnhjvqnMTMps-e3KiA/view?usp=sharing
-- Canva https://www.canva.com/design/DAGdzgXEy6U/-ydR7LgrLcG9qh7NA66HRA/edit?utm_content=DAGdzgXEy6U&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 ---
 ## 🎯 **Conclusão**
