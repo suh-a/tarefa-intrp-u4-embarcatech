@@ -16,7 +16,7 @@ Este projeto tem como objetivo apresentar uma contagem numérica de **0 a 9** em
 
 ---
 ## 📊 **Fluxograma do Funcionamento**
-![image](https://github.com/user-attachments/assets/ee364cbf-0d50-4b22-bbcd-af5a5f30d0de)
+![image](https://github.com/user-attachments/assets/908f0e3e-db72-44ba-a508-758d5a7dcfe1)
 
 
 ---
