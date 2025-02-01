@@ -9,8 +9,6 @@
 
 // definição dos pinos
 #define LED_RGB_RED 13
-#define LED_RGB_GREEN 11
-#define LED_RGB_BLUE 12
 #define BUTTON_A 5
 #define BUTTON_B 6
 #define MATRIX_PIN 7
@@ -19,18 +17,14 @@
 // definição do tempo
 #define DEBOUNCE_DELAY_MS 50
 #define RED_BLINK_INTERVAL_MS 200    // 5 vezes por segundo
-#define RGB_BLINK_INTERVAL_MS 333    // 3 vezes por segundo
 #define DIGIT_DISPLAY_DELAY_MS 1000
 
 // variáveis globais
 static volatile int current_number = 0;
 static volatile uint32_t last_button_time = 0;
 static volatile bool red_led_active = true;
-static volatile bool green_led_active = false;
-static volatile bool blue_led_active = false;
 static volatile int button_a_count = 0;
 static volatile int button_b_count = 0;
-
 
 // Function prototypes
 void setup_gpio(void);
@@ -115,13 +109,9 @@ static const double number_patterns[10][25] = {
 };
 
 void setup_gpio(void) {
-    // Initialize RGB LED pins
+    // Inicializa os leds rgb
     gpio_init(LED_RGB_RED);
-    gpio_init(LED_RGB_GREEN);
-    gpio_init(LED_RGB_BLUE);
     gpio_set_dir(LED_RGB_RED, GPIO_OUT);
-    gpio_set_dir(LED_RGB_GREEN, GPIO_OUT);
-    gpio_set_dir(LED_RGB_BLUE, GPIO_OUT);
 
     // Inicializa os butões com pull-ups
     gpio_init(BUTTON_A);
@@ -134,7 +124,6 @@ void setup_gpio(void) {
     // interrupção
     gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
     gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
-
 }
 
 uint32_t matrix_rgb(double r, double g, double b) {
@@ -162,7 +151,6 @@ void display_number(PIO pio, uint sm, int number, double r, double g, double b) 
 
 void handle_rgb_leds(void) {
     static uint32_t last_red_blink = 0;
-    static uint32_t last_rgb_blink = 0;
     static bool led_state = false;
     uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
@@ -171,15 +159,6 @@ void handle_rgb_leds(void) {
         led_state = !led_state;
         gpio_put(LED_RGB_RED, led_state);
         last_red_blink = current_time;
-    }
-
-    // led verde e azul piscam 3 vezes por segundo
-    if ((green_led_active || blue_led_active) && 
-        (current_time - last_rgb_blink >= RGB_BLINK_INTERVAL_MS)) {
-        led_state = !led_state;
-        if (green_led_active) gpio_put(LED_RGB_GREEN, led_state);
-        if (blue_led_active) gpio_put(LED_RGB_BLUE, led_state);
-        last_rgb_blink = current_time;
     }
 }
 
@@ -197,21 +176,15 @@ void gpio_callback(uint gpio, uint32_t events) {
 
     if (gpio == BUTTON_A) {
         current_number = (current_number + 1) % 10;
-        red_led_active = false;
-        green_led_active = true;
-        blue_led_active = false;
-        gpio_put(LED_RGB_RED, 0);
-        gpio_put(LED_RGB_BLUE, 0);
+        red_led_active = true;
+        gpio_put(LED_RGB_RED, 1);
         button_a_count++;  // Incrementa o contador de A
         printf("Botão A pressionado! Contagem: %d\n", button_a_count);
     } 
     else if (gpio == BUTTON_B) {
         current_number = (current_number - 1 + 10) % 10;
-        red_led_active = false;
-        green_led_active = false;
-        blue_led_active = true;
-        gpio_put(LED_RGB_RED, 0);
-        gpio_put(LED_RGB_GREEN, 0);
+        red_led_active = true;
+        gpio_put(LED_RGB_RED, 1);
         button_b_count++;  // Incrementa o contador de B
         printf("Botão B pressionado! Contagem: %d\n", button_b_count);
     }
@@ -249,8 +222,6 @@ int main() {
 
     // estado inicial dos leds
     red_led_active = true;
-    green_led_active = false;
-    blue_led_active = false;
 
    int last_displayed_number = -1; // Armazena o último número exibido
 
